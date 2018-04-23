@@ -118,7 +118,9 @@
 		// **onSettingsChanged(newSettings)** (required) : A public function we must implement that will be called when a user makes a change to the settings.
 		self.onSettingsChanged = function(newSettings)
 		{
-			client.disconnect();
+			if (client.isConnected()) {
+				client.disconnect();
+			}
 			data = {};
 			currentSettings = newSettings;
 			client.connect({onSuccess:onConnect,
