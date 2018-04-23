@@ -28,6 +28,14 @@
 				"required"    : true
 			},
 			{
+				"name"        : "path",
+				"display_name": "Path",
+				"type"        : "text", 
+				"description" : "The path for your MQTT Server",
+				"default_value": 'ws',
+				"required"    : true
+			},
+			{
 				"name"        : "use_ssl",
 				"display_name": "Use SSL",
 				"type"        : "boolean",
@@ -135,7 +143,8 @@
 		}
 
 		var client = new Paho.MQTT.Client(currentSettings.server,
-										currentSettings.port, 
+										currentSettings.port,
+										currentSettings.path,
 										currentSettings.client_id);
 		client.onConnectionLost = onConnectionLost;
 		client.onMessageArrived = onMessageArrived;
