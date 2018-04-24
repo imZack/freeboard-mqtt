@@ -102,8 +102,11 @@
 		};
 		
 		function onConnectionLost(responseObject) {
-			if (responseObject.errorCode !== 0)
+			if (responseObject.errorCode !== 0) {
 				console.log("onConnectionLost:" + responseObject.errorMessage);
+			}
+
+			self.onSettingsChanged();
 		};
 
 		function onMessageArrived(message) {
