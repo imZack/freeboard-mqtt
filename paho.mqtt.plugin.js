@@ -90,7 +90,8 @@
 
 	var mqttDatasourcePlugin = function(settings, updateCallback)
 	{
- 		var self = this;
+		var self = this;
+		var client;
 		var data = {};
 
 		var currentSettings = settings;
@@ -102,13 +103,18 @@
 		
 		function onConnectionLost(responseObject) {
 			if (responseObject.errorCode !== 0)
-				console.log("onConnectionLost:"+responseObject.errorMessage);
+				console.log("onConnectionLost:" + responseObject.errorMessage);
 		};
 
 		function onMessageArrived(message) {
 			data.topic = message.destinationName;
 			if (currentSettings.json_data) {
-				data.msg = JSON.parse(message.payloadString);
+				try {
+					data.msg = JSON.parse(message.payloadString);
+				} catch (error) {
+					console.log('JSON.parse', error);
+					return;
+				}
 			} else {
 				data.msg = message.payloadString;
 			}
@@ -118,14 +124,22 @@
 		// **onSettingsChanged(newSettings)** (required) : A public function we must implement that will be called when a user makes a change to the settings.
 		self.onSettingsChanged = function(newSettings)
 		{
+			if (newSettings) {
+				currentSettings = newSettings;
+			}
+
 			if (client.isConnected()) {
 				client.disconnect();
 			}
 			data = {};
-			currentSettings = newSettings;
+			client = new Paho.MQTT.Client(currentSettings.server,
+				currentSettings.port,
+				currentSettings.path,
+				currentSettings.client_id);
 			client.connect({onSuccess:onConnect,
 							userName: currentSettings.username,
 							password: currentSettings.password,
+							keepAliveInterval: 10,
 							useSSL: currentSettings.use_ssl});
 		}
 
@@ -144,16 +158,16 @@
 			client = {};
 		}
 
-		var client = new Paho.MQTT.Client(currentSettings.server,
-										currentSettings.port,
-										currentSettings.path,
-										currentSettings.client_id);
+		client = new Paho.MQTT.Client(currentSettings.server,
+			currentSettings.port,
+			currentSettings.path,
+			currentSettings.client_id);
 		client.onConnectionLost = onConnectionLost;
 		client.onMessageArrived = onMessageArrived;
-		client.connect({onSuccess:onConnect, 
-						
+		client.connect({onSuccess:onConnect,
 						userName: currentSettings.username,
 						password: currentSettings.password,
+						keepAliveInterval: 10,
 						useSSL: currentSettings.use_ssl});
 	}
 }());
