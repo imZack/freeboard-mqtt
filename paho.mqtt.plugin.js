@@ -106,7 +106,8 @@
 				console.log("onConnectionLost:" + responseObject.errorMessage);
 			}
 
-			self.onSettingsChanged();
+			//self.onSettingsChanged();
+			location.reload(); // reload entire page if disconnected
 		};
 
 		function onMessageArrived(message) {
