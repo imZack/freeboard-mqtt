@@ -107,7 +107,12 @@
 			}
 
 			//self.onSettingsChanged();
-			location.reload(); // reload entire page if disconnected
+			
+			// only reload in view mode
+			if (window.location.hash.substr(1) == 'view') {
+				// reload entire page if disconnected
+				location.reload();
+			}
 		};
 
 		function onMessageArrived(message) {
