@@ -10,7 +10,7 @@
 		"display_name": "Paho MQTT",
         "description" : "Receive data from an MQTT server.",
 		"external_scripts" : [
-			"https://cdn.rawgit.com/eclipse/paho.mqtt.javascript/master/src/paho-mqtt.js"
+			"https://cdn.rawgit.com/eclipse/paho.mqtt.javascript/1ff91a3e9bda279c855bb951fc32898983f85b3c/src/paho-mqtt.js"
 		],
 		"settings"    : [
 			{
@@ -141,7 +141,7 @@
 				client.disconnect();
 			}
 			data = {};
-			client = new Paho.MQTT.Client(currentSettings.server,
+			client = new Paho.Client(currentSettings.server,
 				currentSettings.port,
 				currentSettings.path,
 				currentSettings.client_id);
