@@ -167,7 +167,7 @@
 			client = {};
 		}
 
-		client = new Paho.MQTT.Client(currentSettings.server,
+		client = new Paho.Client(currentSettings.server,
 			currentSettings.port,
 			currentSettings.path,
 			currentSettings.client_id);
